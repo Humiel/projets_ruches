@@ -1,0 +1,24 @@
+<!-- Bulle d’assistant IA -->
+<div id="ia-assistant-toggle"
+  class="position-fixed bottom-0 end-0 m-4 bg-primary text-white rounded-circle shadow d-flex align-items-center justify-content-center"
+  style="width: 3em;
+    height: 3em;
+    cursor: pointer;
+    z-index: 9999;
+    opacity: .69;">
+  <i class="ri-chat-3-line fs-4"></i>
+</div>
+
+<!-- Fenêtre assistant -->
+<div id="ia-assistant" class="position-fixed bottom-0 end-0 m-4 p-3 bg-white border rounded shadow"
+  style="width: 320px; max-height: 70vh; display: none; z-index: 10000;">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <strong class="text-primary">Assistant IA</strong>
+    <button type="button" class="btn-close btn-sm" id="ia-close"></button>
+  </div>
+  <div id="ia-messages" class="overflow-auto mb-2" style="height: 200px; font-size: 0.9rem;"></div>
+  <form id="ia-form">
+    <input type="text" id="ia-input" class="form-control form-control-sm" placeholder="Posez une question..."
+      autocomplete="off" required>
+  </form>
+</div>
