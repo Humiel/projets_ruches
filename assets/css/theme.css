@@ -1,0 +1,342 @@
+/* === CHARTE GRAPHIQUE optimisée CartoClivages === */
+
+:root {
+    --bleu-principal: #003366;
+    --bleu-hover: #004488;
+    --rouge-accent: #cc3b3b;
+    --fond-site: #f9fafc;
+    --fond-section: #f0f4ff;
+    --fond-carte: #ffffff;
+    --gris-clair: #e6e6e6;
+    --font-principale: 'Inter', sans-serif;
+    --bs-primary-rgb: #003366;
+}
+
+body {
+    font-family: var(--font-principale);
+    background-color: var(--fond-site);
+    color: var(--bleu-principal);
+    line-height: 1.6;
+    /* font-size: clamp(1em, 2.5vw, 1.14em); */
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.carte-clivage {
+    background: #ffffff91;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.meta-tags {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.meta-tags::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.meta-tags .badge {
+    flex: 0 0 auto;
+    margin-right: 0.3em;
+}
+
+.carte-details {
+    display: none;
+    margin-top: 1em;
+}
+
+.texte-lumineux {
+    display: inline-block;
+    font-weight: bold;
+    background: linear-gradient(270deg, #9FC9ED, #C39D62, #144370, #DC3F3A, #C39D62, #9FC9ED);
+    background-size: 1000% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: lumiere-deplacement 8s linear infinite;
+}
+
+@keyframes lumiere-deplacement {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+
+.navbar-nav {
+    text-align: center !important;
+}
+
+.slogan {
+    margin-top: 1.7em;
+    line-height: 1.4em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--bleu-principal);
+    font-weight: 600;
+}
+
+h5,
+.h5 {
+    font-size: 1.3rem;
+}
+
+h6,
+.h6 {
+    font-size: 1.05rem;
+}
+
+p {
+    /* text-align: justify; */
+}
+
+a {
+    color: var(--bleu-principal);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+a:hover {
+    color: var(--rouge-accent);
+    text-underline-offset: 4px;
+}
+
+.comment-ca-marche-wrapper {
+    text-align: end;
+}
+
+a.comment-ca-marche {
+    font-size: 0.875rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--bleu-principal);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+a.comment-ca-marche:hover {
+    color: var(--bleu-hover);
+    text-underline-offset: 4px;
+}
+
+.bg-primary {
+    background-color: var(--bs-primary-rgb) !important;
+}
+
+.text-logo {
+    font-size: 1.5em;
+    margin-bottom: 0.3em;
+    text-align: center;
+}
+
+.logo {
+    height: 8em;
+    max-width: 100%;
+    animation: fadeInZoom 0.8s ease-out;
+}
+
+.texte-lumineuse {
+    display: inline-block;
+    font-weight: bold;
+    background: linear-gradient(270deg, #C39D62, #DC3F3A, #144370, #9FC9ED, #C39D62);
+    background-size: 1000% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: lumiere-deplacement 8s linear infinite;
+}
+
+@keyframes lumiere-deplacement {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+
+@keyframes fadeInZoom {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.badge {
+    font-size: .9em !important;
+    margin-bottom: 1em;
+    font-weight: 100;
+}
+
+.bg-site {
+    background-color: var(--fond-site) !important;
+}
+
+.bg-section {
+    background-color: var(--fond-section) !important;
+}
+
+.bg-light {
+    background-color: var(--fond-section) !important;
+}
+
+.bg-white {
+    background-color: var(--fond-carte) !important;
+}
+
+.bg-info {
+    background-color: #9FC9ED !important;
+}
+
+.shadow-soft {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.border-left-primary {
+    border-left: 5px solid var(--bleu-principal);
+}
+
+.btn-primary-custom {
+    background-color: var(--bleu-principal);
+    color: #fff;
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0, 51, 102, 0.2);
+    opacity: .69;
+    font-weight: 100;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--rouge-accent);
+    color: #fff;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    transition: 0.2s ease-in-out;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 0.3em;
+    right: 0.4em;
+    width: 2.5em;
+    height: 2.5em;
+    font-size: 1.5rem;
+    background-color: var(--bleu-principal) !important;
+    color: #fff !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 9999;
+    /* Assorti à l’autre */
+    transition: opacity 0.4s ease, visibility 0.6s ease;
+}
+
+.back-to-top.show {
+    opacity: 0.69;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.back-to-top:hover {
+    background-color: var(--rouge-accent);
+    color: #fff;
+}
+
+#ia-messages {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+
+    .navbar-brand,
+    .slogan {
+        text-align: center;
+        width: 100%;
+    }
+
+    .navbar .logo {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+
+    .slogan {
+        font-size: 1.05rem;
+        margin-top: 0.5em;
+    }
+
+    header nav a,
+    footer nav a,
+    footer p {
+        font-size: 0.85rem;
+    }
+
+    form label {
+        font-weight: bold;
+        display: block;
+        margin-top: 1em;
+    }
+
+    form input[type="radio"] {
+        margin-right: 8px;
+    }
+
+    form button {
+        margin-top: 1em;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+}
+
+footer {
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+    padding: 2em 0;
+}
+
+.placeholder {
+    background-color: #e0e0e0 !important;
+    color: #6c757d !important;
+}
