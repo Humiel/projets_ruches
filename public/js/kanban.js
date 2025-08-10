@@ -344,8 +344,52 @@ function openTimelineEditor(carte) {
               <label for="titre" class="form-label">Titre :</label>
               <div class="scrollable-x editable-input" id="titre" contenteditable="true">${carte.titre || carte.contenu || ''}</div>
             </div>
+            <!-- 🔷 Décision / Consentement -->
+            <div class="decision-module mb-4 p-3 border rounded">
+            <div class="row g-3 align-items-center">
+                <div class="col-sm-6">
+                <label class="form-label mb-1">Décision / Consentement</label>
+                <select id="decision-statut" class="form-select form-select-sm">
+                    <option value="discussion">En discussion</option>
+                    <option value="vote">Vote en cours</option>
+                    <option value="adoptee">Adoptée</option>
+                    <option value="retravailler">À retravailler</option>
+                    <option value="rejetee">Rejetée</option>
+                </select>
+                </div>
+                <div class="col-sm-6">
+                <label class="form-label mb-1">Date limite :</label>
+                <input id="decision-deadline" type="date" class="form-control form-control-sm">
+                </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <button class="btn btn-sm btn-outline-success" data-position="accord">
+                <i class="ri-check-double-line"></i> D’accord
+                </button>
+
+                <button class="btn btn-sm btn-outline-warning" data-position="reserve">
+                <i class="ri-alert-line"></i> Réserve mineure
+                </button>
+
+                <button class="btn btn-sm btn-outline-danger" data-position="objection">
+                <i class="ri-close-circle-line"></i> Objection
+                </button>
+                <div class="ms-auto d-flex align-items-center gap-2">
+                <div class="consent-bar" title="Répartition des positions">
+                    <span class="seg seg-accord"   style="width:0%"></span>
+                    <span class="seg seg-reserve"  style="width:0%"></span>
+                    <span class="seg seg-objection"style="width:0%"></span>
+                </div>
+                <span class="small text-muted" id="consent-percent">0 %</span>
+                </div>
+            </div>
+            </div>
+
+            <!-- 🔶 Actions -->
             <div class="mb-3">
-              <label class="form-label">Actions :</label>
+            <label class="form-label">Actions :</label>
+
               <div class="etapes-timeline-scrollable d-flex overflow-auto gap-3 px-2" id="etapes-container">
                 ${(carte.etapes || []).map((etape, i) => renderEtapeBloc(etape, i)).join('') || '<small class="no-etape text-muted"><em>Aucune action définie.</em></small>'}
               </div>
@@ -364,6 +408,90 @@ function openTimelineEditor(carte) {
 </div>
 
     `;
+
+    // —— Helpers consentement
+    function computeStats(positions = []) {
+        const total = positions.length || 0;
+        const acc = positions.filter(p => p.position === 'accord').length;
+        const res = positions.filter(p => p.position === 'reserve').length;
+        const obj = positions.filter(p => p.position === 'objection').length;
+        const pct = total ? Math.round((acc / total) * 100) : 0;
+        return { total, acc, res, obj, pct };
+    }
+
+    function hydrateDecisionUI(carte) {
+        const statutSel = document.getElementById('decision-statut');
+        const deadline = document.getElementById('decision-deadline');
+
+        // valeurs initiales
+        const mapInit = {
+            discussion: !carte.decisionOpen && !['adoptee', 'retravailler', 'rejetee'].includes(carte.decisionStatut || ''),
+            vote: carte.decisionOpen === true,
+            adoptee: carte.decisionStatut === 'adoptee',
+            retravailler: carte.decisionStatut === 'retravailler',
+            rejetee: carte.decisionStatut === 'rejetee'
+        };
+        const initialKey = Object.entries(mapInit).find(([, v]) => v)?.[0] || 'discussion';
+        statutSel.value = initialKey;
+
+        if (carte.decisionDeadline) {
+            const d = new Date(carte.decisionDeadline);
+            deadline.value = d.toISOString().slice(0, 10);
+        }
+
+        // stats
+        const { total, acc, res, obj, pct } = computeStats(carte.positions || []);
+        const segA = document.querySelector('.consent-bar .seg-accord');
+        const segR = document.querySelector('.consent-bar .seg-reserve');
+        const segO = document.querySelector('.consent-bar .seg-objection');
+        const txt = document.getElementById('consent-percent');
+
+        const wA = total ? (acc / total) * 100 : 0;
+        const wR = total ? (res / total) * 100 : 0;
+        const wO = total ? (obj / total) * 100 : 0;
+        segA.style.width = `${wA}%`;
+        segR.style.width = `${wR}%`;
+        segO.style.width = `${wO}%`;
+        txt.textContent = `${pct} %`;
+
+        // événements — on ne persiste qu'au "Enregistrer" (cohérent avec ta modale)
+        statutSel.addEventListener('change', () => {
+            const v = statutSel.value;
+            carte.decisionOpen = (v === 'vote');
+            carte.decisionStatut = (v === 'vote' || v === 'discussion') ? null : v;
+        });
+
+        deadline.addEventListener('change', () => {
+            carte.decisionDeadline = deadline.value ? new Date(deadline.value).toISOString() : null;
+        });
+
+        // votes (enregistrement immédiat + refresh statique)
+        document.querySelectorAll('[data-position]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const position = btn.dataset.position;
+                try {
+                    await fetch(`${basePath}/api/kanban/carte/${carte._id}/position`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ position })
+                    });
+                    // Optimiste : on maj localement pour voir la barre bouger
+                    carte.positions = [...(carte.positions || []), { position }];
+                    const s = computeStats(carte.positions);
+                    segA.style.width = `${(s.acc / (s.total || 1)) * 100}%`;
+                    segR.style.width = `${(s.res / (s.total || 1)) * 100}%`;
+                    segO.style.width = `${(s.obj / (s.total || 1)) * 100}%`;
+                    txt.textContent = `${s.pct} %`;
+                } catch (e) {
+                    console.error('Vote échoué', e);
+                }
+            });
+        });
+    }
+
+    // Appel après avoir injecté le HTML
+    hydrateDecisionUI(carte);
+
 
     // Initialiser les tooltips sur tous les boutons dynamiques
 
@@ -455,6 +583,20 @@ function openTimelineEditor(carte) {
             description: bloc.querySelector('[data-field="description"]').value,
             colonne: bloc.dataset.colonne
         }));
+
+        await fetch(`${basePath}/api/kanban/carte/${carte._id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                titre, etapes,
+                colonne: carte.colonne,
+
+                // 👇 ajoute ces deux champs
+                decisionOpen: !!carte.decisionOpen,
+                decisionDeadline: carte.decisionDeadline || null,
+                decisionStatut: carte.decisionStatut || null
+            })
+        });
 
         const ancienneColonne = carte.colonne;
         let nouvelleColonne = ancienneColonne;

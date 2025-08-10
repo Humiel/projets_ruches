@@ -113,3 +113,29 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.decision-module .consent-bar {
+  width: 120px;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #f1f1f1;
+  display: inline-flex;
+}
+
+.decision-module .seg {
+  height: 100%;
+  display: block;
+}
+
+.seg-accord {
+  background: #b8e8d2;
+}
+
+.seg-reserve {
+  background: #ffe39c;
+}
+
+.seg-objection {
+  background: #ffb2b2;
+}

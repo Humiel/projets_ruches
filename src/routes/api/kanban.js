@@ -2,100 +2,99 @@
 const express = require('express');
 const router = express.Router();
 const Carte = require('../../models/Carte');
-const { ObjectId } = require('mongodb');
 
-// Récupérer toutes les cartes
-router.get('/', async (req, res) => {
-  const cartes = await Carte.find().sort({ colonne: 1, ordre: 1 });
-  res.json(cartes);
-});
-
-// Récupérer les timelines
-
-router.get('/carte/:id', async (req, res) => {
-  const db = req.app.locals.db;
-  const { id } = req.params;
-
-  try {
-    const carte = await db.collection('cartes').findOne({ _id: new ObjectId(id) });
-    if (!carte) return res.status(404).json({ error: 'Carte introuvable' });
-
-    res.json(carte);
-  } catch (err) {
-    console.error('❌ Erreur dans GET /carte/:id', err);
-    res.status(500).json({ error: 'Erreur serveur' });
-  }
-});
-
-// Mettre à jour TOUTE la carte (titre, auteur, étapes)
-router.put('/carte/:id', async (req, res) => {
-  const db = req.app.locals.db;
-  const { id } = req.params;
-  const { titre, auteur, etapes } = req.body;
-
-  try {
-    const result = await db.collection('cartes').updateOne(
-      { _id: new ObjectId(id) },
-      { $set: { titre, auteur, etapes } }
-    );
-
-    if (result.modifiedCount === 0) {
-      return res.status(404).json({ error: 'Carte non modifiée (ou introuvable)' });
-    }
-
-    res.json({ success: true });
-  } catch (err) {
-    console.error('❌ Erreur PUT /carte/:id', err);
-    res.status(500).json({ error: 'Erreur serveur' });
-  }
-});
-
-
-// Créer une nouvelle carte
+// POST création carte
 router.post('/', async (req, res) => {
-  console.log("📥 Reçu via POST /api/kanban :", req.body);
-
-  const { contenu, colonne, titre } = req.body;
-  if (!contenu || !colonne) {
-    console.warn("❌ Données manquantes :", req.body);
-    return res.status(400).json({ error: 'Contenu ou colonne manquant' });
-  }
-
   try {
-    const total = await Carte.countDocuments();
-    const MAX_CARTES = 500;
+    const { titre, contenu, colonne } = req.body;
+    if (!titre || !colonne) {
+      return res.status(400).json({ error: 'Titre ou colonne manquant' });
+    }
+    const carte = await Carte.create({
+      titre,
+      contenu: contenu || titre,
+      colonne
+    });
+    res.status(201).json(carte);
+  } catch (err) {
+    console.error('❌ Erreur POST /api/kanban', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
-    if (total >= MAX_CARTES) {
-      console.warn("❌ Limite atteinte :", total);
-      return res.status(403).json({ error: `Limite de ${MAX_CARTES} cartes atteinte.` });
+// LISTE
+router.get('/', async (req, res) => {
+  try {
+    const cartes = await Carte.find().sort({ colonne: 1, ordre: 1 }).lean();
+    res.json(cartes);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
+// DÉTAIL JSON
+router.get('/carte/:id', async (req, res) => {
+  try {
+    const carte = await Carte.findById(req.params.id).lean();
+    if (!carte) return res.status(404).json({ error: 'Carte introuvable' });
+    res.json(carte);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// PUT carte (titre/etapes/colonne + consentement)
+router.put('/carte/:id', async (req, res) => {
+  try {
+    const {
+      titre,
+      etapes,
+      colonne,
+      decisionOpen,
+      decisionDeadline,
+      decisionStatut
+    } = req.body;
+
+    const update = {
+      ...(titre && { titre, contenu: titre }),
+      ...(etapes && { etapes }),
+      ...(colonne && { colonne })
+    };
+
+    if (typeof decisionOpen !== 'undefined') {
+      update.decisionOpen = !!decisionOpen;
     }
 
-  const nouvelleCarte = new Carte({
-    titre: titre || contenu,
-    contenu,
-    colonne,
-    ordre: 0
-  });
+    if (typeof decisionDeadline !== 'undefined') {
+      if (decisionDeadline) {
+        const parsedDate = new Date(decisionDeadline);
+        if (!isNaN(parsedDate.getTime())) {
+          update.decisionDeadline = parsedDate;
+        } else {
+          return res.status(400).json({ error: 'Format de date invalide pour decisionDeadline' });
+        }
+      } else {
+        update.decisionDeadline = null;
+      }
+    }
 
-    const saved = await nouvelleCarte.save();
-    console.log("✅ Carte enregistrée :", saved);
-    res.status(201).json(saved);
-  } catch (err) {
-    console.error("❌ Erreur serveur :", err);
-    res.status(500).json({ error: 'Erreur serveur' });
+    if (typeof decisionStatut !== 'undefined') {
+      update.decisionStatut = decisionStatut || null;
+    }
+
+    const carte = await Carte.findByIdAndUpdate(
+      req.params.id,
+      update,
+      { new: true, runValidators: true }
+    ).lean();
+
+    if (!carte) return res.status(404).json({ error: 'Carte non trouvée' });
+    res.json(carte);
+  } catch (e) {
+    console.error('❌ PUT /api/kanban/carte/:id', e);
+    res.status(400).json({ error: e.message });
   }
 });
 
-// Mettre à jour contenu / colonne / ordre
-router.patch('/:id', async (req, res) => {
-  const updated = await Carte.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(updated);
-});
-
-// Supprimer une carte
-router.delete('/:id', async (req, res) => {
-  await Carte.findByIdAndDelete(req.params.id);
-  res.status(204).send();
-});
 
 module.exports = router;
