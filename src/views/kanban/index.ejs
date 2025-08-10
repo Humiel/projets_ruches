@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>La Voie des Ruches</title>
+  <link rel="stylesheet" href="<%= basePath %>/css/kanban.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+
+  <%- include('../partials/intro') %>
+
+  <div class="board" id="board">
+    <%
+      const colonnes = [
+        "À soumettre", "À clarifier", "En discussion",
+        "À prioriser", "À transformer", "À tester",
+        "En validation", "Adopté (v1)", "Validé (vX)"
+      ];
+    %>
+
+    <% colonnes.forEach(nom => { %>
+      <div class="column" data-colonne="<%= nom %>">
+        <div class="card-list"></div>
+        <div class="drop-fallback"></div>
+      </div>
+    <% }) %>
+  </div>
+
+  <script>
+    const basePath = "<%= basePath %>";
+  </script>
+  <script src="<%= basePath %>/js/kanban.js" defer></script>
+  <div id="timeline-editor"></div>
+</body>
+</html>

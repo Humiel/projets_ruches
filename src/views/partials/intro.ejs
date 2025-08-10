@@ -1,0 +1,41 @@
+<section class="mb-4">
+    <h1>
+        <span class="big">La Voie des Ruches</span>
+        <img src="<%= basePath %>/images/logo_abeille.png" alt="Logo abeille"
+            style="height: 1em; vertical-align: super; margin-left: 2px;">
+        <br><em class="text-muted">Décidons ensemble, pas à pas</em></strong>
+        <br><small class="text-muted"><small>(Démo fonctionnelle)</small></small>
+    </h1>
+    <div class="bg-light rounded shadow-sm p-3 mt-3 position-relative" id="intro-bloc">
+        <p class="text-muted">Cet outil nous permet de <strong>proposer</strong> et de <strong>faire évoluer
+                collectivement</strong> nos <strong>idées citoyennes</strong>.
+            <br>Chaque contribution compte : le processus est <strong>itératif</strong>, <strong>transparent</strong> et
+            <strong>centré sur le consentement</strong>, pas le vote.
+            <br>
+            <i class="ri-pushpin-line" style="color: #999;" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Propositions initiales à soumettre ou clarifier"></i> Propositions –
+            <i class="ri-wechat-line" style="color: #D49A00;" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Discussions et priorisation collective"></i> Discussions –
+            <i class="ri-restart-line" style="color: #2F83B7;" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Transformation des idées en actions concrètes"></i> Évolution –
+            <i class="ri-checkbox-line" style="color: #319C6C;" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Décision validée et partagée par le groupe"></i> Décision partagée.
+            <br>Un espace pour <strong>co-construire</strong>, pas à pas, <strong>des décisions qui nous engagent
+                tous</strong>.
+            </small>
+
+            <button type="button" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Fermer"
+                onclick="document.getElementById('intro-bloc').style.display = 'none'"></button>
+    </div>
+</section>
+
+
+<div class="logout mt-4">
+    <a href="<%= basePath %>/logout" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top"
+        data-bs-html="true" title="" data-bs-original-title="Déconnexion"><i class="ri-logout-circle-line"></i></a>
+</div>
+
+<script>document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+        new bootstrap.Tooltip(el);
+    });
+</script>

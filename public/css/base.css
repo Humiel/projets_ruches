@@ -1,0 +1,115 @@
+/* public/css/base.css */
+body {
+  justify-content: center;
+  align-items: center;
+  min-height: 69vh;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background: #f9f9f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  max-width: 24em;
+  width: 100%;
+  padding: 2em;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+nav {
+  background: #fff;
+  padding: 1em 2em;
+  /* anciennement 1rem 2rem */
+  box-shadow: 0 0.125em 0.25em rgba(0, 0, 0, 0.05);
+  /* 2px 4px */
+  list-style: none;
+  display: flex;
+  gap: 11em;
+}
+
+.nav i {
+  font-size: 1.4em !important;
+  vertical-align: middle;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.25em;
+  /* 20px */
+  padding: 0;
+  margin: 0;
+}
+
+nav a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #0077cc;
+  display: flex;
+  align-items: center;
+  gap: 0.375em;
+  /* 6px */
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: #005999;
+}
+
+.logout {
+  position: absolute;
+  right: 1.4em;
+  top: -.6em;
+}
+
+#intro-bloc {
+  padding-right: 2.4em !important;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+  padding: 0.5em;
+  font-size: 1em;
+  border: 0.0625em solid #ccc;
+  border-radius: 0.25em;
+  width: 100%;
+}
+
+button,
+input[type="submit"] {
+  background: #0077cc;
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  border-radius: 1em;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

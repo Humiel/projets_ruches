@@ -1,0 +1,15 @@
+<!-- src/views/login.ejs -->
+<div class="container">
+
+  <form action="<%= basePath %>/login" method="post">
+      <h1>Connexion</h1>
+    <% if (error) { %>
+      <p style="color:red">
+        <%= error %>
+      </p>
+      <% } %>
+        <input type="text" name="username" placeholder="Identifiant" required>
+        <input type="password" name="password" placeholder="Mot de passe" required>
+        <button type="submit">Se connecter</button>
+  </form>
+</div>

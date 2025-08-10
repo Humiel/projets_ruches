@@ -1,0 +1,19 @@
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Configuration perso
+.env
+
+# macOS
+.DS_Store
+
+# IDE / éditeurs
+.idea/
+.vscode/
+
+# Caches divers
+.cache/
+dist/.env_PROD
+.env_PROD

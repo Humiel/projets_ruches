@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title><%= prop.titre %></title></head>
+<body>
+  <h1><%= prop.titre %></h1>
+  <p><%= prop.description %></p>
+  <form method="POST" action="<%= basePath %>/vote/<%= prop._id %>">
+    <button name="vote" value="oui">✅ Oui (<%= prop.votes.oui %>)</button>
+    <button name="vote" value="non">❌ Non (<%= prop.votes.non %>)</button>
+    <button name="vote" value="abstention">🤷 Abstention (<%= prop.votes.abstention %>)</button>
+  </form>
+  <p><a href="<%= basePath %>/">← Retour</a></p>
+</body>
+</html>
