@@ -438,10 +438,17 @@ input.form-control.scrollable-x {
     border-left: 4px solid #f0ad4e;
 }
 
-.tooltip, .tooltip-inner {
-  z-index: 1060 !important; /* supérieur à .modal-backdrop (1050) et .modal (1055 ou 1050) */
+.tooltip,
+.tooltip-inner {
+    z-index: 1060 !important;
+    /* supérieur à .modal-backdrop (1050) et .modal (1055 ou 1050) */
 }
 
+/* style global */
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
 
 @media (max-width: 768px) {
     .editor-overlay {
