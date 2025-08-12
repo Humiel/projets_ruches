@@ -94,4 +94,4 @@ node scripts/verif_ejs.js
 
 ## Licence
     Code sous licence MIT.
-    Inspiré, pour la stack technique, du projet original DemocracyOS.
+    Inspiré, pour la stack technique, du projet original DemocracyOS (https://github.com/DemocracyOS/app).
