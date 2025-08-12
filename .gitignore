@@ -1,10 +1,12 @@
-
 # Node
 node_modules/
 npm-debug.log*
 
 # Configuration perso
 .env
+
+# Sessions Express
+.sessions/
 
 # macOS
 .DS_Store

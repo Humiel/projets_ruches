@@ -351,7 +351,6 @@ function openTimelineEditor(carte) {
                             <i class="ri-file-edit-line"></i> Modifier la proposition
                             <br><small class="text-muted">...et y ajouter des actions</small>
                             </h3>
-
                             <div class="mb-3">
                             <label for="titre" class="form-label">Titre :</label>
                             <div class="scrollable-x editable-input" id="titre" contenteditable="true">
@@ -359,18 +358,49 @@ function openTimelineEditor(carte) {
                             </div>
                             </div>
 
-                            <div class="mb-3">
-                            <label for="intro" class="form-label">Intro</label>
-                            <textarea id="intro" class="form-control" rows="3"
-                                placeholder="Courte introduction...">${(carte.intro || '').replace(/</g, '&lt;')}</textarea>
+                            <div class="accordion mb-3" id="acc-textes-${carte._id}">
+                            <!-- Intro -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingIntro-${carte._id}">
+                                <button class="accordion-button" type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapseIntro-${carte._id}"
+                                        aria-expanded="true"
+                                        aria-controls="collapseIntro-${carte._id}">
+                                    Intro
+                                </button>
+                                </h2>
+                                <div id="collapseIntro-${carte._id}" class="accordion-collapse collapse show"
+                                    aria-labelledby="headingIntro-${carte._id}">
+                                <div class="accordion-body">
+                                    <label for="intro-${carte._id}" class="form-label">Intro</label>
+                                    <textarea id="intro-${carte._id}" class="form-control" rows="3"
+                                    placeholder="Courte introduction...">${(carte.intro || '').replace(/</g, '&lt;')}</textarea>
+                                </div>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea id="description" class="form-control" rows="8"
-                                placeholder="Description détaillée...">${(carte.description || '').replace(/</g, '&lt;')}</textarea>
+                            <!-- Description -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingDescription-${carte._id}">
+                                <button class="accordion-button collapsed" type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapseDescription-${carte._id}"
+                                        aria-expanded="false"
+                                        aria-controls="collapseDescription-${carte._id}">
+                                    Description
+                                </button>
+                                </h2>
+                                <div id="collapseDescription-${carte._id}" class="accordion-collapse collapse"
+                                    aria-labelledby="headingDescription-${carte._id}">
+                                <div class="accordion-body">
+                                    <label for="description-${carte._id}" class="form-label">Description</label>
+                                    <textarea id="description-${carte._id}" class="form-control" rows="8"
+                                    placeholder="Description détaillée...">${(carte.description || '').replace(/</g, '&lt;')}</textarea>
+                                </div>
+                                </div>
                             </div>
-
+                            </div>
                             <!-- Accordéon Décision + Actions (ouverts par défaut) -->
                             <div class="accordion mb-4" id="${accId}">
 
@@ -774,18 +804,18 @@ async function chargerCommentaires(carteId) {
 
             const icon =
                 c.position === 'accord'
-                    ? '<i class="ri-check-double-line text-success"></i>'
+                    ? '<i class="ri-check-double-line"></i>'
                     : c.position === 'reserve'
-                        ? '<i class="ri-alert-line text-warning"></i>'
-                        : '<i class="ri-close-circle-line text-danger"></i>';
+                        ? '<i class="ri-alert-line"></i>'
+                        : '<i class="ri-close-circle-line"></i>';
 
             li.innerHTML = `
-    <div>
-      <span class="badge rounded-pill ${badge}">${icon}</span>
-      <strong>${c.userName || 'Membre'}</strong> : ${c.comment || ''}
-    </div>
-    <small class="text-muted">${new Date(c.at).toLocaleString()}</small>
-  `;
+                        <div>
+                        <span class="badge rounded-pill ${badge}">${icon}</span>
+                        <strong>${c.userName || 'Membre'}</strong> : ${c.comment || ''}
+                        </div>
+                        <small class="text-muted">${new Date(c.at).toLocaleString()}</small>
+                    `;
             list.appendChild(li);
         });
 
